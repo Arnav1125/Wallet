@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Wallet</title>
+    <style>
+        :root {
+            --primary: #3a4f6c;
+            --secondary: #5d7ba5;
+            --accent: #ff7e5f;
+            --dark: #2c3e50;
+            --light: #f5f7fa;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        /* Credit Card Styling */
+        .card-display {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            height: 180px;
+        }
+        
+        .card-display::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .card-number {
+            font-size: 22px;
+            letter-spacing: 2px;
+            margin: 30px 0 15px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .card-name {
+            text-transform: uppercase;
+        }
+        
+        .card-expiry {
+            text-align: right;
+        }
+        
+        /* Transaction Section */
+        .transaction-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .view-all {
+            font-size: 14px;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+        }
+        
+        .deposit {
+            color: var(--success);
+        }
+        
+        .withdrawal {
+            color: var(--error);
+        }
+        
+        /* Action Panel */
+        .action-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .balance-display {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 15px 0;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #ff6b4d;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            margin-top: 10px;
+        }
+        
+        /* Promo Ad */
+        .promo-ad {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ad-text {
+            font-size: 14px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ad-btn {
+            background: white;
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ad-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            opacity: 0.1;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <!-- Credit Card Display -->
+            <div class="card-display">
+                <div class="card-name">Arnav Gurung</div>
+                <div class="card-number">4242 4242 4242 4242</div>
+                <div class="card-details">
+                    <div class="card-expiry">05/29</div>
+                </div>
+            </div>
+            
+            <!-- Transaction History -->
+            <div class="transaction-section">
+                <div class="section-title">
+                    Recent Transactions
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                
+                <div th:each="txn : ${transactions}">
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-icon">
+                                <span th:text="${#strings.substring(txn.type, 0, 1)}"></span>
+                            </div>
+                            <div>
+                                <div th:text="${txn.type}"></div>
+                                <div class="transaction-date" th:text="${#temporals.format(txn.date, 'MMM dd, hh:mm a')}"></div>
+                            </div>
+                        </div>
+                        <div class="transaction-amount" th:classappend="${txn.type == 'DEPOSIT'} ? 'deposit' : 'withdrawal'"
+                             th:text="${txn.type == 'DEPOSIT'} ? '+ $' + ${txn.amount} : '- $' + ${txn.amount}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Sidebar -->
+        <div class="sidebar">
+            <!-- Balance and Actions -->
+            <div class="action-panel">
+                <h3>Wallet Balance</h3>
+                <div class="balance-display" th:text="'$' + ${balance}">$0.00</div>
+                
+                <div th:if="${message}" class="alert alert-success">
+                    <span th:text="${message}"></span>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-error">
+                    <span th:text="${error}"></span>
+                </div>
+                
+                <div class="form-group">
+                    <form action="/wallet/deposit" method="post">
+                        <label for="depositAmount">Deposit Amount</label>
+                        <input type="number" id="depositAmount" name="amount" step="0.01" min="0.01" required>
+                        <button type="submit" class="btn btn-primary">Deposit</button>
+                    </form>
+                </div>
+                
+                <div class="form-group">
+                    <form action="/wallet/withdraw" method="post">
+                        <label for="withdrawAmount">Withdraw Amount</label>
+                        <input type="number" id="withdrawAmount" name="amount" step="0.01" min="0.01" required>
+                        <button type="submit" class="btn btn-secondary">Withdraw</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Promo Ad -->
+            <div class="promo-ad">
+                <svg class="ad-pattern" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFFFFF" d="M45,-67.1C58.1,-58.4,68.3,-45.3,73.9,-30.2C79.5,-15.2,80.5,1.8,76.2,16.5C71.9,31.3,62.3,43.8,50.1,55.5C37.9,67.2,23.1,78.1,6.5,79.1C-10.2,80.1,-28.7,71.2,-42.9,59.4C-57.1,47.6,-67,32.9,-72.7,16.1C-78.5,-0.7,-80.1,-19.6,-72.3,-35.2C-64.5,-50.8,-47.3,-63.1,-30.9,-70.8C-14.5,-78.5,1.1,-81.6,16.5,-78.5C31.9,-75.4,46.9,-66.1,45,-67.1Z" transform="translate(100 100)"/>
+                </svg>
+                <div class="ad-title">Special Offer!</div>
+                <div class="ad-text">Get 5% cashback on all deposits this month. Limited time offer!</div>
+                <a href="#" class="ad-btn">Learn More</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
