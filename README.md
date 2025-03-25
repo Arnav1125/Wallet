@@ -1,6 +1,9 @@
 # Digital Wallet Application
 
-![Wallet App Screenshot](.C:\Users\rguun\Pictures\Screenshots)
+![Screenshot 2025-03-25 184241](https://github.com/user-attachments/assets/d3ae0bcf-c987-4be5-8e97-1c186741d808)
+
+
+
 
 A secure and intuitive digital wallet application built with Spring Boot and Thymeleaf, featuring transaction management, balance tracking, and a modern UI.
 
